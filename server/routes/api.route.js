@@ -1,5 +1,6 @@
 const { application } = require('express');
 const express = require('express');
+const { sequelize } = require('../db');
 var {
   ACCOUNTS,
   BRANCH,
@@ -177,13 +178,13 @@ router.delete('/branch/:branch_id', async (req, res, next) => {
 
 router.post('/transaction', async (req, res, next) => {
   try {
-    console.log("🚀 ~ file: api.route.js ~ line 181 ~ router.post ~ req.body", req.body)
-    const { account_id, branch_id, amount, action } = req.body;
+    const { account_id, amount, transaction_type, branch_id } = req.body;
+    console.log("🚀 ~ file: api.route.js ~ line 182 ~ router.post ~ req.body", req.body)
     TRANSACTION_BANK.create({
       account_id: account_id,
-      branch_id: branch_id,
       amount: amount,
-      action: action,
+      transaction_type: transaction_type,
+      branch_id: branch_id,
       date_of_transaction: new Date()
     }).then((transaction) => {
       res.send(transaction);
@@ -198,16 +199,21 @@ router.post('/transaction', async (req, res, next) => {
 router.get('/transaction/:customer_id', async (req, res, next) => {
   try {
     const { customer_id } = req.params;
-    const query = await TRANSACTION_BANK.findAll({
-      where: {
-        customer_id: customer_id
-      },
+    console.log("🚀 ~ file: api.route.js ~ line 202 ~ router.get ~ customer_id", customer_id)
+    TRANSACTION_BANK.findAll({
+    where: {
+      account_id: customer_id
+    },
       include: [{
         model: ACCOUNTS,
         attributes: ['account_id', 'current_balance', 'customer_id'],
+        
       }]
-    });
-    res.send(query);
+    }).then((transaction) => {
+      res.send(transaction);
+    }
+    );
+    
   } catch (error) {
     console.log(error);
   }

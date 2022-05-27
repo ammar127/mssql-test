@@ -15,32 +15,35 @@ const FormTransaction = ()=>{
         GetAccountID();
     },[]);
     const DoTransaction = ()=>{
-        const action = document.getElementById('inputState').value;
-let branch_id =  +document.getElementById('brid').value;
-   let amount=      +document.getElementById('amount').value;
-        try {
-            const body = {account_id,branch_id,
-                amount,action};
-            const query = fetch ('http://localhost:5000/api/transaction',{
-                method : 'POST',
-                headers : {'Content-Type':'application/json'},
-                body : body
-            });
-             
-            console.log(body);
-        } catch (error) {
-            console.log(error);
+
+        fetch('http://localhost:5000/api/transaction',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                account_id:account_id,
+                branch_id:branch_id,
+                amount:amount,
+                transaction_type:'deposit'
+            })
+        }).then(res=>res.json()).then(data=>{
+            SetAmt('');
+            SetBrid('');
+            
+            console.log(data);
         }
+        );
     };
     return(
-    <form className='mt-5 jumbotron' onSubmit={DoTransaction}>
+        <div>
     <h1>Transaction</h1>
         <hr></hr>
     <div className="form-group">
     <label>Account ID</label>
     <input type="text" className="form-control" id="exampleInputEmail1" value={account_id} disabled required />
     <label >Branch ID</label>
-    <input type="number" className="form-control" id="brid" onChange={e=>SetBrid(e.target.value)} required/>
+    <input type="number" className="form-control" id="brid" onChange={e=>SetBrid(+e.target.value)} required/>
     <label >Amount</label>
     <input type="number" className="form-control" id="amount" onChange={e=>{
         
@@ -53,8 +56,8 @@ let branch_id =  +document.getElementById('brid').value;
       </select>
     </div>
 
-    <button type="submit" className="btn btn-primary">Add</button>
-    </form>
+    <button type="submit" onClick={DoTransaction} className="btn btn-primary">Add</button>
+</div>
   );  
 };
 

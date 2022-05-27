@@ -13,12 +13,12 @@ function initModels(sequelize) {
   var customer = _customer(sequelize, DataTypes);
   var ACCOUNTS = _ACCOUNTS(sequelize, DataTypes);
 
-  TRANSACTION_BANK.belongsTo(ACCOUNTS, { as: "account", foreignKey: "account_id"});
-  ACCOUNTS.hasMany(TRANSACTION_BANK, { as: "TRANSACTION_BANKs", foreignKey: "account_id"});
-  TRANSACTION_BANK.belongsTo(BRANCH, { as: "branch", foreignKey: "branch_id"});
-  BRANCH.hasMany(TRANSACTION_BANK, { as: "TRANSACTION_BANKs", foreignKey: "branch_id"});
-  ACCOUNTS.belongsTo(customer, { as: "customer", foreignKey: "customer_id"});
-  customer.hasMany(ACCOUNTS, { as: "ACCOUNTs", foreignKey: "customer_id"});
+  TRANSACTION_BANK.belongsTo(ACCOUNTS, {  foreignKey: "account_id"});
+  ACCOUNTS.hasMany(TRANSACTION_BANK, {  foreignKey: "account_id"});
+  TRANSACTION_BANK.belongsTo(BRANCH, {  foreignKey: "branch_id"});
+  BRANCH.hasMany(TRANSACTION_BANK, {  foreignKey: "branch_id"});
+  ACCOUNTS.belongsTo(customer, {  foreignKey: "customer_id"});
+  customer.hasMany(ACCOUNTS, {  foreignKey: "customer_id"});
 
   return {
     ACCOUNTS,
