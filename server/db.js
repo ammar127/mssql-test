@@ -15,15 +15,7 @@ const sequelize = new Sequelize('pkdseers_bank', 'admin','admin', {
     },
     
 });
-// sequelize-auto -o "./models" -d pkdseers_bank -h pkdservers.com -u pkdseers_bank -p 1433 -x xAk6%w09 -e mssql
-sequelize
-  .sync()
-  .then((result) => {
-    console.log(result);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+
 const db = {};
 
 db.sequelize = sequelize;
