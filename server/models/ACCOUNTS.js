@@ -26,7 +26,6 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'ACCOUNTS',
-    schema: 'pkdseers_bank',
     timestamps: false,
     indexes: [
       {

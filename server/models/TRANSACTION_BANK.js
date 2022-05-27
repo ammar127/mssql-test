@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'TRANSACTION_BANK',
-    schema: 'pkdseers_bank',
+    
     timestamps: false,
     indexes: [
       {

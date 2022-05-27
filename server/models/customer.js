@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'customer',
-    schema: 'pkdseers_bank',
+    
     timestamps: false,
     indexes: [
       {

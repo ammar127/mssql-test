@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'EMP_LOGIN',
-    schema: 'pkdseers_bank',
+    
     timestamps: false
   });
 };
