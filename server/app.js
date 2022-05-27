@@ -20,6 +20,25 @@ app.get('/ping', (req, res) => {
 });
 app.use(require("./routes"))
 
+
+// global error handler
+app.use((err, req, res, next) => {
+
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: 'false',
+    message: 'Page not found',
+    error: {
+      statusCode: 404,
+      message: 'You reached a route that is not defined on this server',
+    },
+  });
+});
 const port = 5000;
 app.listen(port, ()=>{
     console.log(`Listening at port ${port}...`);

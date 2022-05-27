@@ -26,6 +26,7 @@ router.param("customer_id", async (req, res, next, account_id) => {
     );
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 });
 
@@ -45,7 +46,7 @@ router
     }
   );
 
-router.delete('/customer/:customer_id', async (req, res) => {
+router.delete('/customer/:customer_id', async (req, res, next) => {
   try {
     const { customer_id } = req.params;
     const query = await customer.destroy({
@@ -60,7 +61,7 @@ router.delete('/customer/:customer_id', async (req, res) => {
 });
 
 
-router.post('employee', async (req, res) => {
+router.post('employee', async (req, res, next) => {
   try {
     const { username, user_password } = req.body;
     EMP_LOGIN.create({
@@ -72,12 +73,13 @@ router.post('employee', async (req, res) => {
     );
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 
 
 })
 
-router.delete('/employee/:username', async (req, res) => {
+router.delete('/employee/:username', async (req, res, next) => {
   try {
     const { username } = req.params;
     const query = await EMP_LOGIN.destroy({
@@ -91,7 +93,7 @@ router.delete('/employee/:username', async (req, res) => {
   }
 });
 
-router.post('/accounts', async (req, res) => {
+router.post('/accounts', async (req, res, next) => {
   try {
     const { customer_id, current_balance } = req.body;
     ACCOUNTS.create({
@@ -104,6 +106,7 @@ router.post('/accounts', async (req, res) => {
     );
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 }).get('/accounts', (req, res, next) => {
   console.log("get all accounts");
@@ -112,7 +115,7 @@ router.post('/accounts', async (req, res) => {
   });
 });
 
-router.delete('/accounts/:account_id', async (req, res) => {
+router.delete('/accounts/:account_id', async (req, res, next) => {
   try {
     const { account_id } = req.params;
     const query = await ACCOUNTS.destroy({
@@ -126,7 +129,7 @@ router.delete('/accounts/:account_id', async (req, res) => {
   }
 });
 
-router.get('/accounts/:customer_id', async (req, res) => {
+router.get('/accounts/:customer_id', async (req, res, next) => {
   try {
     const { customer_id } = req.params;
     const query = await ACCOUNTS.findAll({
@@ -140,7 +143,7 @@ router.get('/accounts/:customer_id', async (req, res) => {
   }
 });
 
-router.post('/branch', async (req, res) => {
+router.post('/branch', async (req, res, next) => {
   try {
     const { name, house_no, city, zip_code } = req.body;
     BRANCH.create({
@@ -154,10 +157,11 @@ router.post('/branch', async (req, res) => {
     );
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 });
 
-router.delete('/branch/:branch_id', async (req, res) => {
+router.delete('/branch/:branch_id', async (req, res, next) => {
   try {
     const { branch_id } = req.params;
     const query = await BRANCH.destroy({
@@ -171,24 +175,27 @@ router.delete('/branch/:branch_id', async (req, res) => {
   }
 });
 
-router.post('/transaction', async (req, res) => {
+router.post('/transaction', async (req, res, next) => {
   try {
+    console.log("🚀 ~ file: api.route.js ~ line 181 ~ router.post ~ req.body", req.body)
     const { account_id, branch_id, amount, action } = req.body;
     TRANSACTION_BANK.create({
       account_id: account_id,
       branch_id: branch_id,
       amount: amount,
-      action: action
+      action: action,
+      date_of_transaction: new Date()
     }).then((transaction) => {
       res.send(transaction);
     }
     );
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 });
 
-router.get('/transaction/:customer_id', async (req, res) => {
+router.get('/transaction/:customer_id', async (req, res, next) => {
   try {
     const { customer_id } = req.params;
     const query = await TRANSACTION_BANK.findAll({
@@ -207,7 +214,7 @@ router.get('/transaction/:customer_id', async (req, res) => {
 });
 
 
-router.get('/customer', async (req, res) => {
+router.get('/customer', async (req, res, next) => {
   try {
 
     const query = await customer.findAll({
@@ -217,10 +224,28 @@ router.get('/customer', async (req, res) => {
 
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 });
-router.get('/employee', async (req, res) => {
+router.post('/employee', async (req, res, next) => {
   try {
+    const { username, user_password } = req.body;
+    EMP_LOGIN.create({
+      username: username,
+      user_password: user_password
+    }).then((emp_login) => {
+      res.send(emp_login);
+    }
+    );
+  } catch (err) {
+    console.error(err.message);
+    next(err);;
+  }
+});
+
+router.get('/employee', async (req, res, next) => {
+  try {
+    console.log("🚀 ~ file: api.route.js ~ line 242 ~ router.get ~ employee",)
     const query = await EMP_LOGIN.findAll({
       attributes: ['username', 'user_password']
     });
@@ -228,22 +253,25 @@ router.get('/employee', async (req, res) => {
 
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 });
-router.get('/branch', async (req, res) => {
+router.get('/branch', async (req, res, next) => {
   try {
 
-    const query = await BRANCH.findAll({
-      attributes: ['branch_id', 'name', 'house_no', 'city', 'zip_code']
+    BRANCH.findAll({}).then((branch) => {
+      res.json(branch);
     });
-    res.json(query);
+    
+    
   } catch (err) {
     console.error(err.message);
+    next(err);
   }
 });
 
 
-router.put('/customer/:username', async (req, res) => {
+router.put('/customer/:username', async (req, res, next) => {
   try {
     const { username } = req.params;
     const { name, phone, email, house_no, city, zipcode } = req.body;
@@ -262,9 +290,10 @@ router.put('/customer/:username', async (req, res) => {
     res.json(query);
   } catch (err) {
     console.error(err.message);
+    next(err);;
   }
 });
-router.get('/customer/:username', async (req, res) => {
+router.get('/customer/:username', async (req, res, next) => {
   try {
 
     const { username } = req.params;

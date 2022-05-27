@@ -18,6 +18,7 @@ const PostEmployee = ()=>{
   const AddEmployee = async()=> {
     try {
       const body = {username,user_password};
+      debugger;
       const query = fetch('http://localhost:5000/api/employee',{
         method : 'POST',
         headers : {'Content-Type' : 'application/json'},
@@ -30,6 +31,7 @@ const PostEmployee = ()=>{
   };
   const GetEmployees = async()=> {
     try {
+      debugger;
       const query = await fetch('http://localhost:5000/api/employee');
       const data =await query.json();
       setEmployees(data);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 const FormTransaction = ()=>{
-    const [account_id,SetAccid] = useState('');
+    const [account_id,SetAccid] = useState(1);
     const [branch_id,SetBrid] = useState('');
     const [amount,SetAmt] = useState('');
     const GetAccountID = ()=>{
@@ -16,13 +16,17 @@ const FormTransaction = ()=>{
     },[]);
     const DoTransaction = ()=>{
         const action = document.getElementById('inputState').value;
+let branch_id =  +document.getElementById('brid').value;
+   let amount=      +document.getElementById('amount').value;
         try {
-            const body = {account_id,branch_id,amount,action};
+            const body = {account_id,branch_id,
+                amount,action};
             const query = fetch ('http://localhost:5000/api/transaction',{
                 method : 'POST',
                 headers : {'Content-Type':'application/json'},
-                body : JSON.stringify(body)
+                body : body
             });
+             
             console.log(body);
         } catch (error) {
             console.log(error);
@@ -36,9 +40,13 @@ const FormTransaction = ()=>{
     <label>Account ID</label>
     <input type="text" className="form-control" id="exampleInputEmail1" value={account_id} disabled required />
     <label >Branch ID</label>
-    <input type="text" className="form-control" id="exampleInputPassword1" onChange={e=>SetBrid(e.target.value)} required/>
+    <input type="number" className="form-control" id="brid" onChange={e=>SetBrid(e.target.value)} required/>
     <label >Amount</label>
-    <input type="text" className="form-control" id="exampleInputPassword1" onChange={e=>SetAmt(e.target.value)} required/>
+    <input type="number" className="form-control" id="amount" onChange={e=>{
+        
+        SetAmt(+e.target.value)
+        
+        }} required/>
     <label >Action</label>
     <select id="inputState" class="form-control">
         <option selected>Deposit</option>
