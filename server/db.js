@@ -6,8 +6,9 @@ const Sequelize = require('sequelize');
 // dbName: pkdseers_bank
 // user: pkdseers_bank
 // password: xAk6%w09
-const sequelize = new Sequelize('pkdseers_bank', 'pkdseers_bank','xAk6%w09', {
-    host: 'pkdservers.com',
+const sequelize = new Sequelize('pkdseers_bank', 'admin','admin', {
+    host: 'DESKTOP-QM2CPN2',
+    port:61408, 
     dialect: 'mssql',
     dialectOptions: {
         encrypt: true
